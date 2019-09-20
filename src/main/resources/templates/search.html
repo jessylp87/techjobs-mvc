@@ -1,20 +1,22 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org/">
-<head th:replace="fragments :: head">
+<head th:replace="fragments :: head"> <!--fragment-->
 </head>
 <body>
 
-<div th:replace="fragments :: page-header"></div>
+<div th:replace="fragments :: page-header"></div> <!--fragment-->
 
-<div class="container body-content">
+<div class="container body-content"><!--bootstrap stuff-->
 
     <h1 th:text="${#strings.capitalizeWords(title)}"></h1>
 
-    <form th:action="@{/search/results}">
+
+    <form th:action="@{/search/results}"> <!--th:action -> where to send POST requests, not implemented yet-->
         <h2>Search by:</h2>
 
         <p>
-            <span th:each="column : ${columns}">
+            <span th:each="column : ${columns}"> <!--iterate columns HashMap passed in-->
+                <!--put in id, value to grab later -->
                 <input
                         type="radio"
                         name="searchType"
@@ -27,7 +29,7 @@
         </p>
 
         <p>
-            <label for="searchTerm">Keyword:</label>
+            <label for="searchTerm">Keyword:</label> <!-- grab2handler: searchTerm, searchType from above -->
             <input type="text" name="searchTerm" id="searchTerm" />
         </p>
 
@@ -36,7 +38,27 @@
 
     <hr />
 
-    <!-- TODO #2 - Loop over jobs map to display all job fields -->
+
+
+
+    <div th:fragment="listings">
+        <div th:if="${jobsCount}">
+            <h3 th:text="${searchTypeChosen} + ' - found: ' + ${jobsCount}" ></h3>
+        </div>
+        <h3 th:if="${jobsCount == 0}">No jobs found</h3>
+
+        <table th:each="job : ${jobs}" class="job-listing">
+            <tbody>
+            <tr th:each="jobDetail : ${job}">
+                <td th:text="${#strings.capitalizeWords(jobDetail.key)}"></td>
+                <td th:text="${jobDetail.value}"></td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+
+
+
 
 </div>
 
